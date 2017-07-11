@@ -31,12 +31,12 @@ const User = module.exports = mongoose.model('User', userSchema);
 
 //Sets up queries to find users either by ID (getUserByID) or username (getUserByUserName)
 module.exports.getUserByID = function(id, callback){
-    user.findByID(id, callback);
+    User.findById(id, callback);
 }
 
-module.exports.getUserByUsername = function(iusername, callback){
+module.exports.getUserByUsername = function(username, callback){
     const query = {username: username};
-    user.findOne(username, callback);
+    User.findOne(query, callback);
 }
 
 //Generates a salt key using bcrpyt for information encryption
@@ -47,5 +47,12 @@ module.exports.addUser = function(newUser, callback){
             newUser.password = hash;
             newUser.save(callback);
         })
+    });
+}
+
+module.exports.comparePassword = function(candidatePassword, hash, callback){
+    bcrypt.compare(candidatePassword, hash, (err, isMatch) => {
+        if(err) throw err;
+        callback(null, isMatch);
     });
 }

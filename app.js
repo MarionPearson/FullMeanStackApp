@@ -29,6 +29,12 @@ app.use(express.static(path.join(__dirname, 'client')));
 //Middleware for Body Parser
 app.use(bodyParser.json())
 
+//Middleware for Passport
+app.use(passport.initialize());
+app.use(passport.session());
+
+require('./config/passport')(passport);
+
 //Routing for application user files
 app.use('/users', users);
 
@@ -41,3 +47,4 @@ app.get('/', (req,res) =>{
 app.listen(port, () => {
     console.log('Server running Port 3000');
 });
+
